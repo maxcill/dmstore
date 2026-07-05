@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.dmstore.com.br/api',
+  apiUrl: 'https://dmstore-production-dcd3.up.railway.app/api',
 };
