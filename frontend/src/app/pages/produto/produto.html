@@ -1,0 +1,81 @@
+@if (produto()) {
+  <div class="container produto-pagina">
+    <nav class="breadcrumb">
+      <a routerLink="/">Início</a> /
+      <a [routerLink]="['/categoria', produto()!.categoria.slug]">{{ produto()!.categoria.nome }}</a> /
+      <span>{{ produto()!.nome }}</span>
+    </nav>
+
+    <div class="produto-grid">
+      <div class="produto-imagem">
+        @if (produto()!.imagens?.length) {
+          <img [src]="produto()!.imagens[0]" [alt]="produto()!.nome" />
+        } @else {
+          <div class="produto-imagem__placeholder">{{ produto()!.marca.charAt(0) }}</div>
+        }
+      </div>
+
+      <div class="produto-detalhes">
+        <span class="produto-marca">{{ produto()!.marca }}</span>
+        <h1 class="produto-nome">{{ produto()!.nome }}</h1>
+
+        <div class="produto-preco-bloco">
+          @if (produto()!.precoPromocional) {
+            <span class="produto-preco-antigo price-tag">{{ produto()!.preco | currency: 'BRL' }}</span>
+            <span class="produto-preco price-tag">{{ produto()!.precoPromocional | currency: 'BRL' }}</span>
+          } @else {
+            <span class="produto-preco price-tag">{{ produto()!.preco | currency: 'BRL' }}</span>
+          }
+        </div>
+
+        <p class="produto-descricao">{{ produto()!.descricao }}</p>
+
+        @if (produto()!.estoque > 0) {
+          <div class="produto-compra">
+            <div class="qtd-seletor">
+              <button type="button" (click)="alterarQuantidade(-1)">−</button>
+              <span>{{ quantidade() }}</span>
+              <button type="button" (click)="alterarQuantidade(1)">+</button>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary produto-comprar-btn"
+              [disabled]="adicionando()"
+              (click)="adicionarAoCarrinho()"
+            >
+              {{ adicionando() ? 'Adicionando...' : 'Adicionar ao carrinho' }}
+            </button>
+          </div>
+          <span class="produto-estoque">{{ produto()!.estoque }} unidades em estoque</span>
+        } @else {
+          <p class="produto-sem-estoque">Produto sem estoque no momento.</p>
+        }
+
+        @if (mensagem()) {
+          <p class="produto-mensagem">{{ mensagem() }}</p>
+        }
+      </div>
+    </div>
+
+    @if (produto()!.especificacoes) {
+      <section class="especificacoes">
+        <h2>Especificações técnicas</h2>
+        <div class="especificacoes-tabela">
+          @for (item of especificacoesArray(); track item.chave) {
+            <div class="especificacoes-linha">
+              <span class="especificacoes-chave">{{ item.chave }}</span>
+              <span class="especificacoes-valor">{{ item.valor }}</span>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else if (carregando()) {
+  <p class="estado-msg">Carregando produto...</p>
+} @else {
+  <div class="estado-msg">
+    <p>Produto não encontrado.</p>
+    <a routerLink="/catalogo" class="btn btn-secondary">Voltar ao catálogo</a>
+  </div>
+}

@@ -1,0 +1,26 @@
+<div class="container categoria-pagina">
+  @if (categoria()) {
+    <div class="categoria-header">
+      <span class="categoria-eyebrow">CATEGORIA</span>
+      <h1>{{ categoria()!.nome }}</h1>
+      @if (categoria()!.descricao) {
+        <p class="categoria-descricao">{{ categoria()!.descricao }}</p>
+      }
+    </div>
+  }
+
+  @if (carregando()) {
+    <p class="estado-msg">Carregando produtos...</p>
+  } @else if (produtos().length === 0) {
+    <div class="vazio">
+      <p>Nenhum produto encontrado nesta categoria.</p>
+      <a routerLink="/catalogo" class="btn btn-secondary">Ver catálogo completo</a>
+    </div>
+  } @else {
+    <div class="produtos-grid">
+      @for (produto of produtos(); track produto.id) {
+        <app-product-card [produto]="produto"></app-product-card>
+      }
+    </div>
+  }
+</div>

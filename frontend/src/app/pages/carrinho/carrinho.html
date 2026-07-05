@@ -1,0 +1,70 @@
+<div class="container carrinho-pagina">
+  <h1>Seu carrinho</h1>
+
+  @if (carregando()) {
+    <p class="estado-msg">Carregando carrinho...</p>
+  } @else if (!cartService.carrinho()?.itens?.length) {
+    <div class="vazio">
+      <p>Seu carrinho está vazio.</p>
+      <a routerLink="/catalogo" class="btn btn-primary">Ver produtos</a>
+    </div>
+  } @else {
+    <div class="carrinho-grid">
+      <div class="carrinho-itens">
+        @for (item of cartService.carrinho()?.itens; track item.id) {
+          <div class="item">
+            <div class="item__imagem">
+              @if (item.produto.imagens?.length) {
+                <img [src]="item.produto.imagens[0]" [alt]="item.produto.nome" />
+              } @else {
+                <span>{{ item.produto.marca.charAt(0) }}</span>
+              }
+            </div>
+
+            <div class="item__info">
+              <span class="item__marca">{{ item.produto.marca }}</span>
+              <a [routerLink]="['/produto', item.produto.slug]" class="item__nome">
+                {{ item.produto.nome }}
+              </a>
+              <span class="item__preco-unitario price-tag">
+                {{ (item.produto.precoPromocional ?? item.produto.preco) | currency: 'BRL' }} / unid.
+              </span>
+            </div>
+
+            <div class="item__qtd">
+              <button type="button" (click)="alterarQuantidade(item.id, item.quantidade - 1)">−</button>
+              <span>{{ item.quantidade }}</span>
+              <button type="button" (click)="alterarQuantidade(item.id, item.quantidade + 1)">+</button>
+            </div>
+
+            <span class="item__subtotal price-tag">
+              {{ (item.produto.precoPromocional ?? item.produto.preco) * item.quantidade | currency: 'BRL' }}
+            </span>
+
+            <button type="button" class="item__remover" (click)="removerItem(item.id)" aria-label="Remover item">
+              ✕
+            </button>
+          </div>
+        }
+      </div>
+
+      <aside class="resumo">
+        <h2>Resumo do pedido</h2>
+        <div class="resumo-linha">
+          <span>Subtotal</span>
+          <span class="price-tag">{{ cartService.subtotal() | currency: 'BRL' }}</span>
+        </div>
+        <div class="resumo-linha">
+          <span>Frete estimado</span>
+          <span class="price-tag">R$ 19,90</span>
+        </div>
+        <div class="resumo-linha resumo-linha--total">
+          <span>Total</span>
+          <span class="price-tag">{{ (cartService.subtotal() + 19.9) | currency: 'BRL' }}</span>
+        </div>
+
+        <a routerLink="/checkout" class="btn btn-primary resumo-btn">Finalizar compra</a>
+      </aside>
+    </div>
+  }
+</div>

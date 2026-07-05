@@ -1,0 +1,75 @@
+<section class="hero">
+  <div class="container hero__inner">
+    <div class="hero__texto">
+      <span class="hero__eyebrow">ASSISTÊNCIA TÉCNICA ESPECIALIZADA</span>
+      <h1 class="hero__titulo">
+        Tecnologia de ponta<br />
+        <span class="hero__titulo-destaque">no seu bolso.</span>
+      </h1>
+      <p class="hero__subtitulo">
+        Celulares, computadores e notebooks com garantia, suporte especializado
+        e entrega para todo o Brasil. Qualidade DM Store.
+      </p>
+      <a routerLink="/catalogo" class="btn btn-primary hero__cta">
+        Ver catálogo completo →
+      </a>
+    </div>
+
+    <div class="hero__painel">
+      <p class="hero__painel-titulo">// DM STORE — DIFERENCIAIS</p>
+      @for (linha of specsDestaque; track linha.label) {
+        <div class="hero__painel-linha">
+          <span class="hero__painel-label">{{ linha.label }}</span>
+          <span class="hero__painel-valor price-tag">{{ linha.valor }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="container categorias-section">
+  <div class="secao-header">
+    <h2 class="secao-titulo">Categorias</h2>
+    <a routerLink="/catalogo" class="secao-link">Ver tudo</a>
+  </div>
+  <div class="categorias-grid">
+    @for (categoria of categorias(); track categoria.id) {
+      <a [routerLink]="['/categoria', categoria.slug]" class="categoria-card">
+        <span>{{ categoria.nome }}</span>
+        <span class="categoria-card__seta">→</span>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="container destaques-section">
+  <div class="secao-header">
+    <h2 class="secao-titulo">🔥 Destaques</h2>
+    <a routerLink="/catalogo" class="secao-link">Ver todos</a>
+  </div>
+
+  @if (carregandoDestaques()) {
+    <p class="estado-msg">Carregando produtos...</p>
+  } @else if (produtosDestaque().length === 0) {
+    <p class="estado-msg">Nenhum produto em destaque no momento.</p>
+  } @else {
+    <div class="produtos-grid">
+      @for (produto of produtosDestaque(); track produto.id) {
+        <app-product-card [produto]="produto"></app-product-card>
+      }
+    </div>
+  }
+</section>
+
+<section class="container recentes-section">
+  <div class="secao-header">
+    <h2 class="secao-titulo">🆕 Recém chegados</h2>
+  </div>
+  @if (produtosRecentes().length > 0) {
+    <div class="produtos-grid">
+      @for (produto of produtosRecentes(); track produto.id) {
+        <app-product-card [produto]="produto"></app-product-card>
+      }
+    </div>
+  }
+</section>

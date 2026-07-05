@@ -1,0 +1,36 @@
+<div class="admin-topo">
+  <h1>Pedidos</h1>
+</div>
+
+@if (carregando()) {
+  <p class="estado-msg">Carregando pedidos...</p>
+} @else {
+  <div class="tabela">
+    <div class="tabela__linha tabela__linha--header">
+      <span>Número</span>
+      <span>Data</span>
+      <span>Total</span>
+      <span>Status</span>
+      <span>Alterar status</span>
+    </div>
+    @for (pedido of pedidos(); track pedido.id) {
+      <div class="tabela__linha">
+        <span>{{ pedido.numeroPedido }}</span>
+        <span>{{ pedido.criadoEm | date: 'dd/MM/yy HH:mm' }}</span>
+        <span class="price-tag">{{ pedido.total | currency: 'BRL' }}</span>
+        <span class="pedido-status" [attr.data-status]="pedido.status">{{ pedido.status }}</span>
+        <span>
+          <select
+            [value]="pedido.status"
+            (change)="atualizarStatus(pedido.id, $any($event.target).value)"
+            class="status-select"
+          >
+            @for (s of statusOpcoes; track s.value) {
+              <option [value]="s.value">{{ s.label }}</option>
+            }
+          </select>
+        </span>
+      </div>
+    }
+  </div>
+}

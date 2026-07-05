@@ -1,0 +1,21 @@
+.categorias-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.categorias-form h3 {
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.categorias-tabela .tabela__linha {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+  .categorias-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,30 @@
+<div class="admin-topo">
+  <h1>Produtos</h1>
+  <a routerLink="/admin/produtos/novo" class="btn btn-primary">+ Novo produto</a>
+</div>
+
+@if (carregando()) {
+  <p class="estado-msg">Carregando produtos...</p>
+} @else {
+  <div class="tabela">
+    <div class="tabela__linha tabela__linha--header">
+      <span>Produto</span>
+      <span>Categoria</span>
+      <span>Preço</span>
+      <span>Estoque</span>
+      <span>Ações</span>
+    </div>
+    @for (produto of produtos(); track produto.id) {
+      <div class="tabela__linha">
+        <span class="produto-nome-cell">{{ produto.nome }}</span>
+        <span>{{ produto.categoria?.nome }}</span>
+        <span class="price-tag">{{ produto.preco | currency: 'BRL' }}</span>
+        <span>{{ produto.estoque }}</span>
+        <span class="acoes">
+          <a [routerLink]="['/admin/produtos', produto.id]" class="btn btn-secondary btn-sm">Editar</a>
+          <button type="button" class="btn btn-danger btn-sm" (click)="remover(produto.id)">Excluir</button>
+        </span>
+      </div>
+    }
+  </div>
+}

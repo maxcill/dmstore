@@ -1,0 +1,82 @@
+.auth-pagina {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+}
+
+.auth-card h1 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.auth-subtitulo {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.auth-form input {
+  width: 100%;
+}
+
+.auth-form button {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  padding: 13px;
+}
+
+.auth-erro {
+  color: var(--danger);
+  font-size: 0.85rem;
+  background: rgba(255, 84, 112, 0.1);
+  border: 1px solid rgba(255, 84, 112, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.auth-rodape {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.auth-rodape a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.auth-dica {
+  margin-top: 16px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}

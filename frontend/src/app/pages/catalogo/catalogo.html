@@ -1,0 +1,80 @@
+<div class="container catalogo">
+  <aside class="filtros">
+    <h3>Filtros</h3>
+
+    <div class="filtro-grupo">
+      <label>Categoria</label>
+      <select [(ngModel)]="filtro.categoriaId" (change)="aplicarFiltros()">
+        <option value="">Todas</option>
+        @for (categoria of categorias(); track categoria.id) {
+          <option [value]="categoria.id">{{ categoria.nome }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filtro-grupo">
+      <label>Preço mínimo</label>
+      <input type="number" [(ngModel)]="filtro.precoMin" (change)="aplicarFiltros()" placeholder="R$ 0" />
+    </div>
+
+    <div class="filtro-grupo">
+      <label>Preço máximo</label>
+      <input type="number" [(ngModel)]="filtro.precoMax" (change)="aplicarFiltros()" placeholder="R$ 10.000" />
+    </div>
+
+    <button type="button" class="btn btn-secondary filtro-limpar" (click)="limparFiltros()">
+      Limpar filtros
+    </button>
+  </aside>
+
+  <section class="resultados">
+    <div class="resultados__topo">
+      <p class="resultados__contagem">
+        {{ resultado()?.total ?? 0 }} produto(s) encontrado(s)
+        @if (filtro.busca) { para "<strong>{{ filtro.busca }}</strong>" }
+      </p>
+
+      <select [(ngModel)]="filtro.ordenarPor" (change)="aplicarFiltros()" class="ordenar-select">
+        <option value="recentes">Mais recentes</option>
+        <option value="preco_asc">Menor preço</option>
+        <option value="preco_desc">Maior preço</option>
+        <option value="avaliacao">Melhor avaliação</option>
+      </select>
+    </div>
+
+    @if (carregando()) {
+      <p class="estado-msg">Carregando produtos...</p>
+    } @else if (resultado()?.produtos?.length === 0) {
+      <div class="vazio">
+        <p>Nenhum produto encontrado com esses filtros.</p>
+        <button type="button" class="btn btn-secondary" (click)="limparFiltros()">Limpar filtros</button>
+      </div>
+    } @else {
+      <div class="produtos-grid">
+        @for (produto of resultado()?.produtos ?? []; track produto.id) {
+          <app-product-card [produto]="produto"></app-product-card>
+        }
+      </div>
+
+      @if ((resultado()?.totalPaginas ?? 1) > 1) {
+        <div class="paginacao">
+          <button
+            class="btn btn-secondary"
+            [disabled]="filtro.pagina === 1"
+            (click)="irParaPagina((filtro.pagina ?? 1) - 1)"
+          >
+            Anterior
+          </button>
+          <span>Página {{ filtro.pagina }} de {{ resultado()?.totalPaginas }}</span>
+          <button
+            class="btn btn-secondary"
+            [disabled]="filtro.pagina === resultado()?.totalPaginas"
+            (click)="irParaPagina((filtro.pagina ?? 1) + 1)"
+          >
+            Próxima
+          </button>
+        </div>
+      }
+    }
+  </section>
+</div>

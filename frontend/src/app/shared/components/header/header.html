@@ -1,0 +1,77 @@
+<header class="header">
+  <div class="header__top">
+    <div class="container header__top-inner">
+
+      <a routerLink="/" class="logo">
+        <img src="/assets/logo.png" alt="DMStore" class="logo__img" />
+      </a>
+
+      <form class="search" (ngSubmit)="buscar()">
+        <input
+          type="text"
+          placeholder="Buscar celulares, notebooks, computadores..."
+          [(ngModel)]="termoBusca"
+          name="busca"
+        />
+        <button type="submit" class="search__btn" aria-label="Buscar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+
+      <nav class="header__actions">
+        @if (authService.estaLogado()) {
+          <div class="user-menu" (click)="menuAberto = !menuAberto">
+            <span class="user-menu__icone">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+                <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="user-menu__nome">{{ authService.usuario()?.nome?.split(' ')?.[0] }}</span>
+
+            @if (menuAberto) {
+              <div class="user-menu__dropdown">
+                @if (authService.ehAdmin()) {
+                  <a routerLink="/admin">⚙ Painel Admin</a>
+                }
+                <a routerLink="/minha-conta/pedidos">📦 Meus pedidos</a>
+                <button type="button" (click)="sair()">↩ Sair</button>
+              </div>
+            }
+          </div>
+        } @else {
+          <a routerLink="/login" class="header__link">Entrar</a>
+          <a routerLink="/registro" class="btn btn-primary header__btn-cadastro">Cadastrar</a>
+        }
+
+        <a routerLink="/carrinho" class="cart-link" aria-label="Carrinho">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="21" r="1.4" fill="currentColor"/>
+            <circle cx="17" cy="21" r="1.4" fill="currentColor"/>
+          </svg>
+          @if (cartService.totalItens() > 0) {
+            <span class="cart-link__badge">{{ cartService.totalItens() }}</span>
+          }
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="header__nav">
+    <div class="container header__nav-inner">
+      <a routerLink="/catalogo" class="header__nav-link header__nav-link--all">
+        ☰ Todos os produtos
+      </a>
+      @for (categoria of categorias(); track categoria.id) {
+        <a [routerLink]="['/categoria', categoria.slug]" class="header__nav-link">
+          {{ categoria.nome }}
+        </a>
+      }
+    </div>
+  </div>
+</header>

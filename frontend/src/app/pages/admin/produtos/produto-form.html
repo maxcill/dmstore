@@ -1,0 +1,110 @@
+<div class="admin-topo">
+  <h1>{{ ehEdicao ? 'Editar produto' : 'Novo produto' }}</h1>
+  <a routerLink="/admin/produtos" class="btn btn-secondary">Voltar</a>
+</div>
+
+<form class="form-card" (ngSubmit)="salvar()">
+  @if (erro()) {
+    <p class="form-erro">{{ erro() }}</p>
+  }
+  @if (sucesso()) {
+    <p class="form-sucesso">{{ sucesso() }}</p>
+  }
+
+  <!-- UPLOAD DE IMAGENS -->
+  <div class="upload-secao">
+    <h3>Imagens do produto</h3>
+
+    <div class="upload-area" (click)="inputImagem.click()" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
+      <input
+        #inputImagem
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        multiple
+        style="display:none"
+        (change)="onArquivosSelecionados($event)"
+      />
+      <div class="upload-area__icone">📁</div>
+      <p class="upload-area__texto">Clique ou arraste imagens aqui</p>
+      <p class="upload-area__sub">JPG, PNG, WEBP ou GIF — máx. 5MB por imagem (até 5 imagens)</p>
+    </div>
+
+    @if (uploading()) {
+      <p class="upload-progresso">Enviando imagens... aguarde</p>
+    }
+
+    @if (imagensPreview().length > 0) {
+      <div class="imagens-preview">
+        @for (url of imagensPreview(); track url; let i = $index) {
+          <div class="imagem-preview-item">
+            <img [src]="urlCompleta(url)" [alt]="'Imagem ' + (i + 1)" />
+            <button type="button" class="imagem-remover" (click)="removerImagem(i)">✕</button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-grid">
+    <label class="campo-largo">
+      Nome do produto
+      <input type="text" [(ngModel)]="form.nome" name="nome" required />
+    </label>
+
+    <label>
+      Marca
+      <input type="text" [(ngModel)]="form.marca" name="marca" required />
+    </label>
+
+    <label>
+      Categoria
+      <select [(ngModel)]="form.categoriaId" name="categoriaId" required>
+        <option value="" disabled>Selecione</option>
+        @for (categoria of categorias(); track categoria.id) {
+          <option [value]="categoria.id">{{ categoria.nome }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Preço (R$)
+      <input type="number" step="0.01" [(ngModel)]="form.preco" name="preco" required />
+    </label>
+
+    <label>
+      Preço promocional (opcional)
+      <input type="number" step="0.01" [(ngModel)]="form.precoPromocional" name="precoPromocional" />
+    </label>
+
+    <label>
+      Estoque
+      <input type="number" [(ngModel)]="form.estoque" name="estoque" required />
+    </label>
+
+    <label style="display:flex; flex-direction:row; align-items:center; gap:10px;">
+      <input type="checkbox" [(ngModel)]="form.destaque" name="destaque" style="width:auto;" />
+      Produto em destaque
+    </label>
+
+    <label class="campo-largo">
+      Descrição
+      <textarea [(ngModel)]="form.descricao" name="descricao" required></textarea>
+    </label>
+  </div>
+
+  <h3>Especificações técnicas</h3>
+  @for (spec of specs; track $index) {
+    <div class="specs-linha">
+      <input type="text" [(ngModel)]="spec.chave" [name]="'chave' + $index" placeholder="Ex: Processador" />
+      <input type="text" [(ngModel)]="spec.valor" [name]="'valor' + $index" placeholder="Ex: Intel i5" />
+      <button type="button" class="specs-remover" (click)="removerSpec($index)">✕</button>
+    </div>
+  }
+  <button type="button" class="btn btn-secondary btn-sm" (click)="adicionarSpec()">+ Adicionar especificação</button>
+
+  <div class="form-acoes">
+    <button type="submit" class="btn btn-primary" [disabled]="salvando() || uploading()">
+      {{ salvando() ? 'Salvando...' : 'Salvar produto' }}
+    </button>
+  </div>
+</form>

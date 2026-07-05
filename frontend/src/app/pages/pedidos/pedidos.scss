@@ -1,0 +1,165 @@
+.pedidos-pagina, .pedido-detalhe-pagina {
+  padding: 32px 24px 64px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pedidos-pagina h1, .pedido-detalhe-pagina h1 {
+  font-size: 1.8rem;
+  margin-bottom: 28px;
+}
+
+.pedidos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pedido-card {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  transition: border-color 0.15s ease;
+}
+
+.pedido-card:hover {
+  border-color: var(--accent);
+}
+
+.pedido-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pedido-card__numero {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.pedido-card__data {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pedido-card__status {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+}
+
+.pedido-card__status[data-status='pago'] {
+  background: rgba(0, 229, 160, 0.12);
+  color: var(--success);
+}
+
+.pedido-card__status[data-status='enviado'],
+.pedido-card__status[data-status='entregue'] {
+  background: rgba(61, 90, 255, 0.14);
+  color: var(--accent);
+}
+
+.pedido-card__status[data-status='cancelado'] {
+  background: rgba(255, 84, 112, 0.12);
+  color: var(--danger);
+}
+
+.pedido-card__total {
+  font-weight: 700;
+  color: var(--success);
+}
+
+.vazio, .estado-msg {
+  text-align: center;
+  padding: 64px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.pedido-sucesso {
+  background: rgba(0, 229, 160, 0.1);
+  border: 1px solid rgba(0, 229, 160, 0.3);
+  color: var(--success);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.pedido-bloco {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.pedido-bloco h2 {
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.pedido-bloco-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pedido-item-linha {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+.pedido-item-linha:last-child {
+  border-bottom: none;
+}
+
+.pedido-endereco {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.pedido-totais {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.pedido-totais-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.pedido-totais-linha--total {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.pedido-totais-linha--total .price-tag {
+  color: var(--success);
+}

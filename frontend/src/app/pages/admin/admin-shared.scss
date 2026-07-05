@@ -1,0 +1,156 @@
+.admin-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-topo h1 {
+  font-size: 1.6rem;
+}
+
+.tabela {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tabela__linha {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.6fr 1.4fr;
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  align-items: center;
+  gap: 8px;
+}
+
+.tabela__linha:last-child {
+  border-bottom: none;
+}
+
+.tabela__linha--header {
+  background: var(--surface-alt);
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.produto-nome-cell {
+  font-weight: 600;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
+.estado-msg {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--text-muted);
+}
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  max-width: 720px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-grid label,
+.form-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.form-grid label.campo-largo,
+.form-card label.campo-largo {
+  grid-column: 1 / -1;
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea {
+  width: 100%;
+}
+
+.form-card textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.specs-linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.specs-remover {
+  color: var(--danger);
+  font-size: 0.85rem;
+  padding: 8px;
+}
+
+.form-acoes {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form-erro {
+  color: var(--danger);
+  font-size: 0.85rem;
+  background: rgba(255, 84, 112, 0.1);
+  border: 1px solid rgba(255, 84, 112, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+.form-sucesso {
+  color: var(--success);
+  font-size: 0.85rem;
+  background: rgba(0, 229, 160, 0.1);
+  border: 1px solid rgba(0, 229, 160, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .tabela__linha {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .tabela__linha--header {
+    display: none;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

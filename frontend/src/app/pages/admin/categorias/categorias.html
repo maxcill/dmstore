@@ -1,0 +1,55 @@
+<div class="admin-topo">
+  <h1>Categorias</h1>
+</div>
+
+<div class="categorias-layout">
+  <form class="form-card categorias-form" (ngSubmit)="salvar()">
+    <h3>{{ editandoId ? 'Editar categoria' : 'Nova categoria' }}</h3>
+
+    @if (erro()) {
+      <p class="form-erro">{{ erro() }}</p>
+    }
+
+    <label>
+      Nome
+      <input type="text" [(ngModel)]="form.nome" name="nome" required />
+    </label>
+
+    <label>
+      Ícone (nome do ícone Ionicons, opcional)
+      <input type="text" [(ngModel)]="form.icone" name="icone" placeholder="Ex: phone-portrait-outline" />
+    </label>
+
+    <label>
+      Descrição (opcional)
+      <textarea [(ngModel)]="form.descricao" name="descricao"></textarea>
+    </label>
+
+    <div class="form-acoes">
+      <button type="submit" class="btn btn-primary" [disabled]="salvando()">
+        {{ salvando() ? 'Salvando...' : (editandoId ? 'Atualizar' : 'Criar categoria') }}
+      </button>
+      @if (editandoId) {
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">Cancelar</button>
+      }
+    </div>
+  </form>
+
+  <div class="tabela categorias-tabela">
+    <div class="tabela__linha tabela__linha--header">
+      <span>Nome</span>
+      <span>Slug</span>
+      <span>Ações</span>
+    </div>
+    @for (categoria of categorias(); track categoria.id) {
+      <div class="tabela__linha">
+        <span>{{ categoria.nome }}</span>
+        <span>{{ categoria.slug }}</span>
+        <span class="acoes">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="editar(categoria)">Editar</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="remover(categoria.id)">Excluir</button>
+        </span>
+      </div>
+    }
+  </div>
+</div>

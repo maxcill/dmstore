@@ -1,0 +1,90 @@
+<div class="container checkout-pagina">
+  <h1>Finalizar compra</h1>
+
+  <div class="checkout-grid">
+    <form class="endereco-form" (ngSubmit)="finalizarPedido()">
+      <h2>Endereço de entrega</h2>
+
+      <label class="campo-largo">
+        Destinatário
+        <input type="text" [(ngModel)]="endereco.destinatario" name="destinatario" required />
+      </label>
+
+      <div class="campo-duo">
+        <label>
+          Rua
+          <input type="text" [(ngModel)]="endereco.rua" name="rua" required />
+        </label>
+        <label>
+          Número
+          <input type="text" [(ngModel)]="endereco.numero" name="numero" required />
+        </label>
+      </div>
+
+      <label class="campo-largo">
+        Complemento (opcional)
+        <input type="text" [(ngModel)]="endereco.complemento" name="complemento" />
+      </label>
+
+      <div class="campo-duo">
+        <label>
+          Bairro
+          <input type="text" [(ngModel)]="endereco.bairro" name="bairro" required />
+        </label>
+        <label>
+          CEP
+          <input type="text" [(ngModel)]="endereco.cep" name="cep" required placeholder="00000-000" />
+        </label>
+      </div>
+
+      <div class="campo-duo">
+        <label>
+          Cidade
+          <input type="text" [(ngModel)]="endereco.cidade" name="cidade" required />
+        </label>
+        <label>
+          Estado (UF)
+          <input type="text" [(ngModel)]="endereco.estado" name="estado" required maxlength="2" placeholder="SP" />
+        </label>
+      </div>
+
+      @if (erro()) {
+        <p class="checkout-erro">{{ erro() }}</p>
+      }
+
+      <button type="submit" class="btn btn-primary checkout-btn" [disabled]="processando()">
+        {{ processando() ? 'Processando pedido...' : 'Confirmar pedido' }}
+      </button>
+    </form>
+
+    <aside class="resumo">
+      <h2>Resumo do pedido</h2>
+
+      @for (item of cartService.carrinho()?.itens; track item.id) {
+        <div class="resumo-item">
+          <span>{{ item.quantidade }}x {{ item.produto.nome }}</span>
+          <span class="price-tag">
+            {{ (item.produto.precoPromocional ?? item.produto.preco) * item.quantidade | currency: 'BRL' }}
+          </span>
+        </div>
+      }
+
+      <div class="resumo-linha">
+        <span>Subtotal</span>
+        <span class="price-tag">{{ cartService.subtotal() | currency: 'BRL' }}</span>
+      </div>
+      <div class="resumo-linha">
+        <span>Frete</span>
+        <span class="price-tag">R$ 19,90</span>
+      </div>
+      <div class="resumo-linha resumo-linha--total">
+        <span>Total</span>
+        <span class="price-tag">{{ (cartService.subtotal() + 19.9) | currency: 'BRL' }}</span>
+      </div>
+
+      <p class="resumo-aviso">
+        O pagamento é processado de forma segura via Stripe na etapa seguinte.
+      </p>
+    </aside>
+  </div>
+</div>
