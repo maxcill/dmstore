@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.angular/
+uploads/
+.env
+*.log
+frontend/=6.0.0
+frontend/ng
+frontend/frontend@0.0.0
+.git/gc.log
