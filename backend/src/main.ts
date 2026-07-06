@@ -9,14 +9,17 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  console.log('DATABASE_URL definida:', !!configService.get('DATABASE_URL'));
-  console.log('DB_HOST:', configService.get('DB_HOST'));
-
   app.use('/api/pagamento/webhook', bodyParser.raw({ type: 'application/json' }));
 
   app.enableCors({
-    origin: configService.get<string>('FRONTEND_URL', 'http://localhost:4200'),
+    origin: [
+      'http://localhost:4200',
+      'https://dmstore-nu.vercel.app',
+      configService.get<string>('FRONTEND_URL', ''),
+    ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.setGlobalPrefix('api');
