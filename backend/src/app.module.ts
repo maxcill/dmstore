@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
@@ -13,6 +14,7 @@ import { OrdersModule } from './orders/orders.module';
 import { PaymentModule } from './payment/payment.module';
 import { SeedModule } from './seed/seed.module';
 import { UploadModule } from './upload/upload.module';
+import { MercadoLivreModule } from './integrations/mercadolivre/mercadolivre.module';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { UploadModule } from './upload/upload.module';
       rootPath: join(process.cwd(), 'uploads'),
       serveRoot: '/api/upload/imagens',
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
     CategoriesModule,
@@ -35,6 +38,7 @@ import { UploadModule } from './upload/upload.module';
     PaymentModule,
     SeedModule,
     UploadModule,
+    MercadoLivreModule,
   ],
 })
 export class AppModule {}

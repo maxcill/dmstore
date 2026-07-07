@@ -1,0 +1,184 @@
+<div class="admin-topo">
+  <h1>🛒 Importar produtos</h1>
+</div>
+
+<!-- ABAS -->
+<div class="abas">
+  <button [class.ativo]="aba === 'manual'" (click)="aba = 'manual'">
+    🔍 Busca manual
+  </button>
+  <button [class.ativo]="aba === 'categoria'" (click)="aba = 'categoria'">
+    📦 Por categoria
+  </button>
+  <button [class.ativo]="aba === 'automatico'" (click)="aba = 'automatico'">
+    ⚡ Importação automática
+  </button>
+</div>
+
+<!-- ABA: BUSCA MANUAL -->
+@if (aba === 'manual') {
+  <div class="secao">
+    <h2>Buscar produto no Mercado Livre</h2>
+    <p class="descricao">Busque um produto, selecione os que quer importar e escolha a categoria.</p>
+
+    <div class="busca-form">
+      <input
+        type="text"
+        [(ngModel)]="termoBusca"
+        placeholder="Ex: iPhone 15, Samsung Galaxy, Notebook Dell..."
+        (keyup.enter)="buscar()"
+      />
+      <button class="btn btn-primary" (click)="buscar()" [disabled]="buscando()">
+        {{ buscando() ? 'Buscando...' : 'Buscar' }}
+      </button>
+    </div>
+
+    @if (resultados().length > 0) {
+      <div class="filtros-importacao">
+        <label>
+          Importar para categoria:
+          <select [(ngModel)]="categoriaIdSelecionada">
+            <option value="">Selecione...</option>
+            @for (cat of categorias(); track cat.id) {
+              <option [value]="cat.id">{{ cat.nome }}</option>
+            }
+          </select>
+        </label>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="selecionados().length === 0 || !categoriaIdSelecionada || importando()"
+          (click)="importarSelecionados()"
+        >
+          {{ importando() ? 'Importando...' : 'Importar ' + selecionados().length + ' produto(s)' }}
+        </button>
+      </div>
+
+      <p class="resultado-info">{{ totalResultados() }} produtos encontrados — selecione os que deseja importar:</p>
+
+      <div class="produtos-ml-grid">
+        @for (produto of resultados(); track produto.id) {
+          <div
+            class="produto-ml-card"
+            [class.selecionado]="estaSelecionado(produto.id)"
+            (click)="toggleSelecionado(produto.id)"
+          >
+            <div class="produto-ml-card__check">
+              {{ estaSelecionado(produto.id) ? '✅' : '⬜' }}
+            </div>
+            <img [src]="produto.thumbnail" [alt]="produto.title" />
+            <div class="produto-ml-card__info">
+              <p class="produto-ml-card__nome">{{ produto.title }}</p>
+              <p class="produto-ml-card__vendedor">{{ produto.seller.nickname }}</p>
+              <p class="produto-ml-card__preco price-tag">
+                @if (produto.original_price && produto.original_price > produto.price) {
+                  <span class="riscado">R$ {{ produto.original_price | number: '1.2-2' }}</span>
+                }
+                R$ {{ produto.price | number: '1.2-2' }}
+              </p>
+              <p class="produto-ml-card__estoque">Estoque: {{ produto.available_quantity }}</p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="paginacao">
+        <button class="btn btn-secondary" [disabled]="offset === 0" (click)="paginaAnterior()">Anterior</button>
+        <span>Página {{ paginaAtual() }}</span>
+        <button class="btn btn-secondary" (click)="proximaPagina()">Próxima</button>
+      </div>
+    }
+  </div>
+}
+
+<!-- ABA: POR CATEGORIA -->
+@if (aba === 'categoria') {
+  <div class="secao">
+    <h2>Importar por categoria do Mercado Livre</h2>
+    <p class="descricao">Escolha uma categoria e importe automaticamente os produtos mais relevantes.</p>
+
+    <div class="categoria-form">
+      <label>
+        Categoria do Mercado Livre:
+        <select [(ngModel)]="categoriaMLSelecionada">
+          <option value="">Selecione...</option>
+          <option value="celulares">📱 Celulares</option>
+          <option value="computadores">🖥️ Computadores</option>
+          <option value="notebooks">💻 Notebooks</option>
+          <option value="monitores">🖥 Monitores</option>
+          <option value="acessorios">🎧 Acessórios</option>
+        </select>
+      </label>
+
+      <label>
+        Importar para categoria da loja:
+        <select [(ngModel)]="categoriaIdSelecionada">
+          <option value="">Selecione...</option>
+          @for (cat of categorias(); track cat.id) {
+            <option [value]="cat.id">{{ cat.nome }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        Quantidade de produtos:
+        <select [(ngModel)]="limiteImportacao">
+          <option [value]="5">5 produtos</option>
+          <option [value]="10">10 produtos</option>
+          <option [value]="20">20 produtos</option>
+          <option [value]="50">50 produtos</option>
+        </select>
+      </label>
+
+      <button
+        class="btn btn-primary"
+        [disabled]="!categoriaMLSelecionada || !categoriaIdSelecionada || importando()"
+        (click)="importarCategoria()"
+      >
+        {{ importando() ? 'Importando...' : 'Importar produtos' }}
+      </button>
+    </div>
+  </div>
+}
+
+<!-- ABA: AUTOMÁTICO -->
+@if (aba === 'automatico') {
+  <div class="secao">
+    <h2>⚡ Importação automática — todas as categorias</h2>
+    <p class="descricao">
+      Importa automaticamente os produtos mais relevantes do Mercado Livre
+      para <strong>todas as categorias</strong> da sua loja de uma vez.
+    </p>
+
+    <div class="auto-form">
+      <label>
+        Produtos por categoria:
+        <select [(ngModel)]="limiteImportacao">
+          <option [value]="3">3 por categoria</option>
+          <option [value]="5">5 por categoria</option>
+          <option [value]="10">10 por categoria</option>
+          <option [value]="20">20 por categoria</option>
+        </select>
+      </label>
+
+      <button
+        class="btn btn-primary btn-grande"
+        [disabled]="importando()"
+        (click)="importarTudo()"
+      >
+        {{ importando() ? 'Importando tudo...' : '⚡ Importar tudo agora' }}
+      </button>
+    </div>
+
+    <div class="aviso">
+      <p>⚠️ Esta ação pode importar muitos produtos de uma vez. Use com moderação.</p>
+    </div>
+  </div>
+}
+
+<!-- RESULTADO -->
+@if (mensagemResultado()) {
+  <div class="resultado-box" [class.sucesso]="sucessoImportacao()" [class.erro]="!sucessoImportacao()">
+    {{ mensagemResultado() }}
+  </div>
+}

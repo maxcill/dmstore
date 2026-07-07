@@ -11,11 +11,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         <h2>Painel admin</h2>
         <nav>
           <a routerLink="/admin" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">
-            Dashboard
+            📊 Dashboard
           </a>
-          <a routerLink="/admin/produtos" routerLinkActive="ativo">Produtos</a>
-          <a routerLink="/admin/categorias" routerLinkActive="ativo">Categorias</a>
-          <a routerLink="/admin/pedidos" routerLinkActive="ativo">Pedidos</a>
+          <a routerLink="/admin/produtos" routerLinkActive="ativo">🛍️ Produtos</a>
+          <a routerLink="/admin/categorias" routerLinkActive="ativo">📂 Categorias</a>
+          <a routerLink="/admin/pedidos" routerLinkActive="ativo">📦 Pedidos</a>
+          <a routerLink="/admin/importacao" routerLinkActive="ativo">🛒 Importar ML</a>
         </nav>
       </aside>
 
@@ -36,6 +37,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     .admin-sidebar {
       background: var(--surface);
       border: 1px solid var(--border);
+      border-top: 2px solid var(--accent);
       border-radius: var(--radius-md);
       padding: 20px;
       position: sticky;
@@ -43,7 +45,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
 
     .admin-sidebar h2 {
-      font-size: 1rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
       margin-bottom: 16px;
     }
 
@@ -71,18 +76,11 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       color: var(--accent);
     }
 
-    .admin-conteudo {
-      min-width: 0;
-    }
+    .admin-conteudo { min-width: 0; }
 
     @media (max-width: 900px) {
-      .admin-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-sidebar {
-        position: static;
-      }
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { position: static; }
     }
   `],
 })

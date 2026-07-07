@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import * as bodyParser from 'body-parser';
@@ -9,22 +10,30 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  app.use('/api/pagamento/webhook', bodyParser.raw({ type: 'application/json' }));
+  // Necessário para validar a assinatura dos webhooks do Stripe
+  app.use(
+    '/api/pagamento/webhook',
+    bodyParser.raw({ type: 'application/json' }),
+  );
 
   app.enableCors({
-    origin: [
-      'http://localhost:4200',
-      'https://dmstore-nu.vercel.app',
-      configService.get<string>('FRONTEND_URL', ''),
-    ],
+    origin: configService.get<string>('FRONTEND_URL', 'http://localhost:4200'),
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: false,
+    }),
+  );
+
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)),
+  );
 
   const port = configService.get<number>('PORT', 3000);
   await app.listen(port);
