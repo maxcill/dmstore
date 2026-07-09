@@ -18,6 +18,8 @@ import { MercadoLivreModule } from './integrations/mercadolivre/mercadolivre.mod
 import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
+    MercadoLivreModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
