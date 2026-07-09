@@ -73,13 +73,17 @@ export class ImportacaoService {
     mlIds: string[],
     categoriaId: string,
   ): Promise<{ importados: number; erros: string[] }> {
-    const categoria = await this.categoryRepository.findOne({
-      where: { id: categoriaId },
-    });
+    if (!categoriaId) {
+  throw new Error('categoriaId é obrigatório');
+}
 
-    if (!categoria) {
-      throw new Error('Categoria não encontrada');
-    }
+const categoria = await this.categoryRepository.findOne({
+  where: { id: categoriaId },
+});
+
+if (!categoria) {
+  throw new Error('Categoria não encontrada');
+}
 
     let importados = 0;
     const erros: string[] = [];

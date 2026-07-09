@@ -5,7 +5,12 @@ import {
   Post,
   Query,
   UseGuards,
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsArray,
 } from '@nestjs/common';
+import { IsString as IsStr } from 'class-validator';
 import { MercadoLivreService } from './mercadolivre.service';
 import { ImportacaoService } from './importacao.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
