@@ -15,7 +15,7 @@ import { PaymentModule } from './payment/payment.module';
 import { SeedModule } from './seed/seed.module';
 import { UploadModule } from './upload/upload.module';
 import { MercadoLivreModule } from './integrations/mercadolivre/mercadolivre.module';
-
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
