@@ -45,6 +45,10 @@ export class MercadoLivreService {
               offset,
               condition: 'new',
             },
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+              'Accept': 'application/json',
+            }
           },
         ),
       );
@@ -70,6 +74,10 @@ export class MercadoLivreService {
               sort: 'relevance',
               condition: 'new',
             },
+             headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json',
+          },
           },
         ),
       );
@@ -81,7 +89,7 @@ export class MercadoLivreService {
   }
 
   async buscarDetalhes(mlId: string): Promise<MLProduto> {
-    const { data } = await firstValueFrom(
+      const { data } = await firstValueFrom(
       this.httpService.get<MLProduto>(`${this.baseUrl}/items/${mlId}`),
     );
     return data;
