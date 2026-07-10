@@ -121,7 +121,7 @@ if (!categoria) {
     categoriaId: string,
     limite = 10,
   ): Promise<{ importados: number; erros: string[] }> {
-    const categoria = await this.categoryRepository.findOne({
+    const categoria = await this.categoryRepository.findOneBy({
       where: { id: categoriaId },
     });
 

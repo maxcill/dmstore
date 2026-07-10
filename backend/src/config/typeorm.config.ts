@@ -16,4 +16,7 @@ export const getTypeOrmConfig = (
   entities: [User, Category, Product, Cart, CartItem, Order, OrderItem],
   synchronize: true,
   ssl: { rejectUnauthorized: false },
+  extra: {
+    invalidWhereValuesBehavior: { undefined: 'ignore' },
+  },
 });
