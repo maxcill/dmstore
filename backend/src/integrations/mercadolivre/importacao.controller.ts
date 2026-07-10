@@ -5,12 +5,9 @@ import {
   Post,
   Query,
   UseGuards,
-  IsString,
-  IsOptional,
-  IsNumber,
-  IsArray,
 } from '@nestjs/common';
-import { IsString as IsStr } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsArray } from 'class-validator';
+import { Type } from 'class-transformer';
 import { MercadoLivreService } from './mercadolivre.service';
 import { ImportacaoService } from './importacao.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -19,13 +16,30 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '../../common/enums/user-role.enum';
 
 class ImportarSelecionadosDto {
+  @IsArray()
   mlIds: string[];
+
+  @IsString()
   categoriaId: string;
 }
 
 class ImportarCategoriaDto {
+  @IsString()
   categoriaMLSlug: string;
+
+  @IsString()
   categoriaId: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  limite?: number;
+}
+
+class ImportarTudoDto {
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
   limite?: number;
 }
 
@@ -38,7 +52,6 @@ export class ImportacaoController {
     private readonly importacaoService: ImportacaoService,
   ) {}
 
-  // Buscar produtos no ML para prévia antes de importar
   @Get('buscar')
   buscar(
     @Query('q') query: string,
@@ -48,7 +61,6 @@ export class ImportacaoController {
     return this.mlService.buscarProdutos(query, limite ?? 20, offset ?? 0);
   }
 
-  // Buscar por categoria do ML
   @Get('buscar-categoria')
   buscarCategoria(
     @Query('slug') slug: string,
@@ -56,18 +68,19 @@ export class ImportacaoController {
   ) {
     const categoriaId = this.mlService.categoriasML[slug];
     if (!categoriaId) {
-      return { erro: 'Categoria ML não encontrada', categoriasDisponiveis: Object.keys(this.mlService.categoriasML) };
+      return {
+        erro: 'Categoria ML não encontrada',
+        categoriasDisponiveis: Object.keys(this.mlService.categoriasML),
+      };
     }
     return this.mlService.buscarPorCategoria(categoriaId, limite ?? 20);
   }
 
-  // Importar produtos selecionados manualmente
   @Post('importar-selecionados')
   importarSelecionados(@Body() dto: ImportarSelecionadosDto) {
     return this.importacaoService.importarSelecionados(dto.mlIds, dto.categoriaId);
   }
 
-  // Importar automaticamente por categoria
   @Post('importar-categoria')
   importarCategoria(@Body() dto: ImportarCategoriaDto) {
     return this.importacaoService.importarPorCategoria(
@@ -77,13 +90,11 @@ export class ImportacaoController {
     );
   }
 
-  // Importar todas as categorias automaticamente
   @Post('importar-tudo')
-  importarTudo(@Body() body: { limite?: number }) {
-    return this.importacaoService.importarTodasCategorias(body.limite ?? 5);
+  importarTudo(@Body() dto: ImportarTudoDto) {
+    return this.importacaoService.importarTodasCategorias(dto.limite ?? 5);
   }
 
-  // Listar categorias ML disponíveis
   @Get('categorias-ml')
   categoriasML() {
     return this.mlService.categoriasML;

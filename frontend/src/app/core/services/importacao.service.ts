@@ -45,12 +45,13 @@ export class ImportacaoService {
     );
   }
 
-  importarCategoria(categoriaMLSlug: string, categoriaId: string, limite: number): Observable<{ importados: number; erros: string[] }> {
-    return this.http.post<{ importados: number; erros: string[] }>(
-      `${this.baseUrl}/importar-categoria`,
-      { categoriaMLSlug, categoriaId, limite },
-    );
-  }
+  importarCategoria(categoriaMLSlug: string, categoriaId: string, limite: number) {
+  console.log('Enviando:', { categoriaMLSlug, categoriaId, limite }); // debug
+  return this.http.post<{ importados: number; erros: string[] }>(
+    `${this.baseUrl}/importar-categoria`,
+    { categoriaMLSlug, categoriaId, limite },
+  );
+}
 
   importarTudo(limite = 5): Observable<Record<string, number>> {
     return this.http.post<Record<string, number>>(
