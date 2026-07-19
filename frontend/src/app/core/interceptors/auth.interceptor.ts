@@ -1,17 +1,20 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const token = authService.obterToken();
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = localStorage.getItem('token'); // ou a chave que você usa
 
-  if (token) {
-    const reqClonada = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
+  // VEJA AQUI: Verifica se a requisição NÃO é para o Mercado Livre e se vai para sua API
+  const isMercadoLivre = req.url.includes('://mercadolibre.com');
+  
+  if (token && !isMercadoLivre) {
+    const cloned = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
     });
-    return next(reqClonada);
+    return next(cloned);
   }
 
+  // Se for Mercado Livre, envia a requisição limpa sem cabeçalhos customizados
   return next(req);
 };
